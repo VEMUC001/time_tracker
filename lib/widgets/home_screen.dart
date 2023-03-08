@@ -1,5 +1,7 @@
+import 'package:employee_time_tracker/constants.dart';
 import 'package:employee_time_tracker/main.dart';
 import 'package:employee_time_tracker/models/employee.dart';
+import 'package:employee_time_tracker/models/employee_2.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -100,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
         _appendEnteredNumber(s, false),
       },
       style: ButtonStyle(
-        // backgroundColor: const MaterialStatePropertyAll(Colors.white),
         backgroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.pressed)) {
@@ -129,7 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return ElevatedButton(
       onPressed: () {
         if (_enteredNumber.length == 4) {
-          validateEmployeeCode(_enteredNumber);
+          // validateEmployeeCode(_enteredNumber);
+          validateEmployee2Code(_enteredNumber);
           _appendEnteredNumber("", true);
         } else {
           _appendEnteredNumber("", true);
@@ -146,36 +148,22 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void snackBarWithMessage(String message) {
-    SnackBar snackBar = SnackBar(
-      showCloseIcon: true,
-      duration: const Duration(seconds: 10),
-      closeIconColor: Colors.white,
-      backgroundColor: Colors.blue,
-      content: Text(
-        message,
-        style: const TextStyle(color: Colors.white, fontSize: 16),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void validateEmployeeCode(String enteredNumber) {
+  void validateEmployee2Code(String enteredNumber) {
     bool validated = false;
-    for (var employee in employees) {
+    for (var employee in puesdoEmployees) {
       if (employee.employeeCode == enteredNumber) {
         validated = true;
         if (employee.hasCheckedIn) {
           //set the entry time for the employee here
-          employee.entryTime = DateTime.now();
+          enterEntryTime(employee);
           employee.hasCheckedIn = false;
         } else {
           //set the exit time for the employee here
-          employee.exitTime = DateTime.now();
+          enterExitTime(employee);
           employee.hasCheckedIn = true;
         }
         String message = employee.hasCheckedIn
-            ? 'Have a good day ${employee.fullName}. You worked ${timeInBetween(employee)}'
+            ? 'Have a good day ${employee.fullName}. You worked ${timeInBetween2(employee)}'
             : 'Welcome ${employee.fullName}, entry time has been logged';
 
         snackBarWithMessage(message);
@@ -188,12 +176,70 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void enterEntryTime(Employee2 employee) {
+    TimeEntry timeEntry = TimeEntry(entryTime: DateTime.now());
+    employee.entryMap[Constants.getKeyWithDateTimeNowFormat()] = timeEntry;
+  }
+
+  void enterExitTime(Employee2 employee) {
+    if (employee.entryMap
+        .containsKey(Constants.getKeyWithDateTimeNowFormat())) {
+      TimeEntry timeEntry = TimeEntry(
+          entryTime: employee
+              .entryMap[Constants.getKeyWithDateTimeNowFormat()]!.entryTime,
+          exitTime: DateTime.now());
+      employee.entryMap.update(
+          Constants.getKeyWithDateTimeNowFormat(), (value) => timeEntry);
+    } else {
+      snackBarWithMessage(
+          "No entry found for your entry time for today. Please contact administration");
+    }
+  }
+
+  String timeInBetween2(Employee2 employee) {
+    String key = Constants.getKeyWithDateTimeNowFormat();
+    if (employee.entryMap.containsKey(key)) {
+      TimeEntry timeEntry = employee.entryMap[key]!;
+      if (timeEntry.entryTime != null && timeEntry.exitTime != null) {
+        String hours = timeEntry.exitTime!
+            .difference(timeEntry.entryTime!)
+            .inHours
+            .toString();
+        String minutes = timeEntry.exitTime!
+            .difference(timeEntry.entryTime!)
+            .inMinutes
+            .toString();
+        return "$hours hours, $minutes minutes";
+      } else {
+        return 'Error missing either the entry or exit time - ${timeEntry.entryTime} ${timeEntry.exitTime}';
+      }
+    } else {
+      return 'Error';
+    }
+  }
+
   String timeInBetween(Employee employee) {
     String hours =
         employee.exitTime!.difference(employee.entryTime!).inHours.toString();
     String minutes =
-        employee.exitTime!.difference(employee.entryTime!).inMinutes.toString();
+        ((employee.exitTime!.difference(employee.entryTime!).inMinutes) -
+                (int.parse(hours) * 60))
+            .toString();
 
     return "$hours hours, $minutes minutes";
+  }
+
+  void snackBarWithMessage(String message) {
+    SnackBar snackBar = SnackBar(
+      showCloseIcon: true,
+      duration: const Duration(seconds: 10),
+      closeIconColor: Colors.white,
+      backgroundColor: Colors.blue,
+      content: Text(
+        message,
+        style: const TextStyle(color: Colors.white, fontSize: 16),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
