@@ -2,7 +2,7 @@ class Employee2 {
   String fullName;
   String employeeCode;
   bool hasCheckedIn;
-  Map<DateTime, TimeEntry> entryMap;
+  Map<String, TimeEntry> entryMap;
 
   Employee2({
     required this.fullName,
@@ -12,9 +12,11 @@ class Employee2 {
   });
 
   factory Employee2.fromJson(Map<String, dynamic> json) {
-    Map<DateTime, TimeEntry> entryMap = {};
-    json['entryMap'].forEach((key, value) {
-      entryMap[DateTime.parse(key)] = TimeEntry.fromJson(value);
+    Map<String, dynamic> entryJsonMap = json['entryMap'];
+    Map<String, TimeEntry> entryMap = {};
+    entryJsonMap.forEach((key, entryJson) {
+      TimeEntry entry = TimeEntry.fromJson(entryJson);
+      entryMap[key] = entry;
     });
     return Employee2(
       fullName: json['fullName'],
@@ -25,36 +27,38 @@ class Employee2 {
   }
 
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> json = {
+    Map<String, dynamic> entryJsonMap = {};
+    entryMap.forEach((key, value) {
+      entryJsonMap[key] = value.toJson();
+    });
+    return {
       'fullName': fullName,
       'employeeCode': employeeCode,
       'hasCheckedIn': hasCheckedIn,
-      'entryMap': {},
+      'entryMap': entryJsonMap,
     };
-    entryMap.forEach((key, value) {
-      json['entryMap'][key.toString()] = value.toJson();
-    });
-    return json;
   }
 }
 
 class TimeEntry {
-  DateTime entryTime;
-  DateTime exitTime;
+  DateTime? entryTime;
+  DateTime? exitTime;
 
-  TimeEntry({required this.entryTime, required this.exitTime});
+  TimeEntry({this.entryTime, this.exitTime});
 
   factory TimeEntry.fromJson(Map<String, dynamic> json) {
     return TimeEntry(
-      entryTime: DateTime.parse(json['entryTime']),
-      exitTime: DateTime.parse(json['exitTime']),
+      entryTime:
+          json['entryTime'] != null ? DateTime.parse(json['entryTime']) : null,
+      exitTime:
+          json['exitTime'] != null ? DateTime.parse(json['exitTime']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'entryTime': entryTime.toIso8601String(),
-      'exitTime': exitTime.toIso8601String(),
+      'entryTime': entryTime?.toIso8601String(),
+      'exitTime': exitTime?.toIso8601String(),
     };
   }
 }
