@@ -133,18 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _appendEnteredNumber("", true);
         } else {
           _appendEnteredNumber("", true);
-
-          SnackBar snackBar = const SnackBar(
-            showCloseIcon: true,
-            duration: Duration(seconds: 10),
-            closeIconColor: Colors.white,
-            backgroundColor: Colors.blue,
-            content: Text(
-              "Please enter 4 digits",
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          snackBarWithMessage("Please enter 4 digits");
         }
       },
       child: const Padding(
@@ -155,6 +144,20 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  void snackBarWithMessage(String message) {
+    SnackBar snackBar = SnackBar(
+      showCloseIcon: true,
+      duration: const Duration(seconds: 10),
+      closeIconColor: Colors.white,
+      backgroundColor: Colors.blue,
+      content: Text(
+        message,
+        style: const TextStyle(color: Colors.white, fontSize: 16),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void validateEmployeeCode(String enteredNumber) {
@@ -174,32 +177,14 @@ class _MyHomePageState extends State<MyHomePage> {
         String message = employee.hasCheckedIn
             ? 'Have a good day ${employee.fullName}. You worked ${timeInBetween(employee)}'
             : 'Welcome ${employee.fullName}, entry time has been logged';
-        SnackBar snackBar = SnackBar(
-          showCloseIcon: true,
-          duration: const Duration(seconds: 10),
-          closeIconColor: Colors.white,
-          backgroundColor: Colors.blue,
-          content: Text(
-            message,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        snackBarWithMessage(message);
         break;
       }
     }
     if (!validated) {
-      SnackBar snackBar = SnackBar(
-        showCloseIcon: true,
-        duration: const Duration(seconds: 10),
-        closeIconColor: Colors.white,
-        backgroundColor: Colors.blue,
-        content: Text(
-          'Wrong Code Entered: $enteredNumber, Please try again',
-          style: const TextStyle(color: Colors.white, fontSize: 16),
-        ),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      snackBarWithMessage(
+          'Wrong Code Entered: $enteredNumber, Please try again');
     }
   }
 
