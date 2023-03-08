@@ -1,15 +1,7 @@
-import 'package:employee_time_tracker/models/employee.dart';
 import 'package:flutter/material.dart';
 
 import 'app.dart';
 import 'models/employee_2.dart';
-
-Employee employee1 = Employee("Chandra", "1234");
-Employee employee2 = Employee("Tannu", "9999");
-Employee employee3 = Employee("Hamza", "0000");
-Employee employee4 = Employee("Jagpreet", "5555");
-
-List<Employee> employees = [employee1, employee2, employee3, employee4];
 
 Employee2 puesdoEmployee1 = Employee2(
   fullName: "Chandra",
