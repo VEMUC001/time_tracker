@@ -1,6 +1,5 @@
 import 'package:employee_time_tracker/constants.dart';
 import 'package:employee_time_tracker/main.dart';
-import 'package:employee_time_tracker/models/employee.dart';
 import 'package:employee_time_tracker/models/employee_2.dart';
 import 'package:flutter/material.dart';
 
@@ -216,17 +215,6 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return 'Error';
     }
-  }
-
-  String timeInBetween(Employee employee) {
-    String hours =
-        employee.exitTime!.difference(employee.entryTime!).inHours.toString();
-    String minutes =
-        ((employee.exitTime!.difference(employee.entryTime!).inMinutes) -
-                (int.parse(hours) * 60))
-            .toString();
-
-    return "$hours hours, $minutes minutes";
   }
 
   void snackBarWithMessage(String message) {
