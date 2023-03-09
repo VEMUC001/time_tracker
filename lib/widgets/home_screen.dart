@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:employee_time_tracker/constants.dart';
 import 'package:employee_time_tracker/main.dart';
@@ -26,11 +27,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> readEmployeeData() async {
-    FirebaseDatabase.instance
-        .ref()
-        .child("employees")
-        .once()
-        .then((event) => debugPrint(event.snapshot.value.toString()));
+    FirebaseDatabase.instance.ref().child('employees').get().then(
+      (DataSnapshot snapshot) {
+        if (snapshot.exists) {
+          var list = snapshot.value as List;
+          for (var element in list) {
+            Employee2 employee =
+                Employee2.fromJson(Map<String, dynamic>.from(element));
+            listOfEmployees.add(employee);
+          }
+        } else {
+          debugPrint('No data available.');
+        }
+      },
+    );
   }
 
   void _appendEnteredNumber(String number, bool clearAll) {

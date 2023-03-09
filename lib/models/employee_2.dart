@@ -12,12 +12,18 @@ class Employee2 {
   });
 
   factory Employee2.fromJson(Map<String, dynamic> json) {
-    Map<String, dynamic> entryJsonMap = json['entryMap'];
     Map<String, TimeEntry> entryMap = {};
-    entryJsonMap.forEach((key, entryJson) {
-      TimeEntry entry = TimeEntry.fromJson(entryJson);
-      entryMap[key] = entry;
-    });
+
+    if (json['entryMap'] != null) {
+      Map<String, dynamic> entryJsonMap =
+          Map<String, dynamic>.from(json['entryMap']);
+      entryJsonMap.forEach((key, entryJson) {
+        TimeEntry entry = TimeEntry.fromJson(
+          Map<String, dynamic>.from(entryJson),
+        );
+        entryMap[key] = entry;
+      });
+    }
     return Employee2(
       fullName: json['fullName'],
       employeeCode: json['employeeCode'],
