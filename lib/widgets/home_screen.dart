@@ -28,58 +28,61 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: addEntryBody(),
+      backgroundColor: Colors.white,
     );
   }
 
   Widget addEntryBody() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        const SizedBox(height: 10),
-        addMessageView("Enter your 4 digit code"),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            addCircularButton("1"),
-            addCircularButton("2"),
-            addCircularButton("3"),
+          children: <Widget>[
+            const SizedBox(height: 10),
+            addMessageView("Enter your 4 digit code"),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                addCircularButton("1"),
+                addCircularButton("2"),
+                addCircularButton("3"),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                addCircularButton("4"),
+                addCircularButton("5"),
+                addCircularButton("6"),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                addCircularButton("7"),
+                addCircularButton("8"),
+                addCircularButton("9"),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Center(child: addCircularButton("0")),
+            _enteredNumber.isNotEmpty
+                ? addMessageView("Entering: $_enteredNumber")
+                : const SizedBox(height: 1),
+            const SizedBox(height: 20),
+            addSubmitButton(),
+            const SizedBox(height: 10),
+            buildListViewEmployees(),
           ],
         ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            addCircularButton("4"),
-            addCircularButton("5"),
-            addCircularButton("6"),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            addCircularButton("7"),
-            addCircularButton("8"),
-            addCircularButton("9"),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Center(child: addCircularButton("0")),
-        _enteredNumber.isNotEmpty
-            ? addMessageView("Entering: $_enteredNumber")
-            : const SizedBox(height: 1),
-        const SizedBox(height: 20),
-        addSubmitButton(),
-      ],
+      ),
     );
   }
 
@@ -153,15 +156,15 @@ class _MyHomePageState extends State<MyHomePage> {
       if (employee.employeeCode == enteredNumber) {
         validated = true;
         if (employee.hasCheckedIn) {
-          //set the entry time for the employee here
-          enterEntryTime(employee);
-          employee.hasCheckedIn = false;
-        } else {
           //set the exit time for the employee here
           enterExitTime(employee);
+          employee.hasCheckedIn = false;
+        } else {
+          //set the entry time for the employee here
+          enterEntryTime(employee);
           employee.hasCheckedIn = true;
         }
-        String message = employee.hasCheckedIn
+        String message = !employee.hasCheckedIn
             ? 'Have a good day ${employee.fullName}. You worked ${timeInBetween2(employee)}'
             : 'Welcome ${employee.fullName}, entry time has been logged';
 
@@ -229,5 +232,92 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Widget addWorkingTextView(String message) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Text(
+          message,
+          style: const TextStyle(color: Colors.blueGrey, fontSize: 18),
+        ),
+      ),
+    );
+  }
+
+  Widget buildListViewEmployees() {
+    //filter active employees only
+    var activeFilteredList =
+        puesdoEmployees.where((employee) => employee.hasCheckedIn).toList();
+
+    var inActiveFilteredList =
+        puesdoEmployees.where((employee) => !employee.hasCheckedIn).toList();
+
+    return Column(
+      children: [
+        activeFilteredList.isNotEmpty
+            ? addWorkingTextView("Currently Clocked In")
+            : const SizedBox(
+                height: 1,
+              ),
+        buildListOfEmployees(activeFilteredList, Colors.green, true),
+        inActiveFilteredList.isNotEmpty
+            ? addWorkingTextView("Not Clocked In")
+            : const SizedBox(
+                height: 1,
+              ),
+        buildListOfEmployees(inActiveFilteredList, Colors.red, false),
+      ],
+    );
+  }
+
+  ListView buildListOfEmployees(
+      List<Employee2> filteredList, Color backgroundColor, bool isActiveList) {
+    String? entryTime;
+    String exitTimeString = "Enter your code to log your time";
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: filteredList.length,
+      itemBuilder: (context, index) {
+        if (isActiveList) {
+          entryTime = Constants.formattedDate(filteredList[index]
+              .entryMap[Constants.getKeyWithDateTimeNowFormat()]!
+              .entryTime!);
+        } else {}
+
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Material(
+            elevation: 10,
+            color: backgroundColor,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            child: Container(
+              padding: const EdgeInsets.all(4.0),
+              height: 60,
+              width: double.maxFinite,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Column(
+                  children: [
+                    Text(
+                      filteredList[index].fullName,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    if (entryTime != null && entryTime!.isNotEmpty)
+                      Text("Clocked in at : $entryTime ",
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

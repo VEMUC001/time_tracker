@@ -1,7 +1,7 @@
 class Employee2 {
   String fullName;
   String employeeCode;
-  bool hasCheckedIn;
+  bool hasCheckedIn = false;
   Map<String, TimeEntry> entryMap;
 
   Employee2({
