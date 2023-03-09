@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:employee_time_tracker/constants.dart';
 import 'package:employee_time_tracker/main.dart';
 import 'package:employee_time_tracker/models/employee_2.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -13,6 +16,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _enteredNumber = "";
+  bool isLoading = true;
+  List<Employee2> listOfEmployees = [];
+
+  @override
+  void initState() {
+    super.initState();
+    readEmployeeData();
+  }
+
+  Future<void> readEmployeeData() async {
+    FirebaseDatabase.instance
+        .ref()
+        .child("employees")
+        .once()
+        .then((event) => debugPrint(event.snapshot.value.toString()));
+  }
 
   void _appendEnteredNumber(String number, bool clearAll) {
     setState(() {
