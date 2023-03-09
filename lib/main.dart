@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'app.dart';
 import 'models/employee_2.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 Employee2 puesdoEmployee1 = Employee2(
   fullName: "Chandra",
@@ -35,6 +37,8 @@ List<Employee2> puesdoEmployees = [
   puesdoEmployee4
 ];
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
