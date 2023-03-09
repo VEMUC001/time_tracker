@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "87797584274",
+    "project_id": "timetracker-31f94",
+    "storage_bucket": "timetracker-31f94.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87797584274:android:6c03cb4c4489247cb3b14b",
+        "android_client_info": {
+          "package_name": "com.example.employee_time_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87797584274-h6m1b8jr05lqrb4e3l0pqiq6vbnmik2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGAD9_qc_OBhPQ_cDCpCjuCUG-nB6xgNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87797584274-h6m1b8jr05lqrb4e3l0pqiq6vbnmik2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
