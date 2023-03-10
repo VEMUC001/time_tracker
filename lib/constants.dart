@@ -6,7 +6,7 @@ class Constants {
 
   static String getKeyWithDateTimeNowFormat() {
     DateTime now = DateTime.now();
-    return '${now.month}:${now.day}:${now.year}';
+    return '${now.year}-${now.month}-${now.day}';
   }
 
   static String formattedDate(DateTime date) {

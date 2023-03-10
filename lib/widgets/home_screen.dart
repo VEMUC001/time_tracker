@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:employee_time_tracker/constants.dart';
-import 'package:employee_time_tracker/main.dart';
 import 'package:employee_time_tracker/models/employee_2.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -27,20 +25,38 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> readEmployeeData() async {
-    FirebaseDatabase.instance.ref().child('employees').get().then(
+    await FirebaseDatabase.instance.ref('employees').get().then(
       (DataSnapshot snapshot) {
         if (snapshot.exists) {
-          var list = snapshot.value as List;
+          debugPrint(snapshot.value.toString());
+          debugPrint(snapshot.value.runtimeType.toString());
+
+          var list = (snapshot.value as Map).values.toList();
           for (var element in list) {
             Employee2 employee =
                 Employee2.fromJson(Map<String, dynamic>.from(element));
             listOfEmployees.add(employee);
           }
+          setState(
+            () {
+              listOfEmployees = listOfEmployees;
+            },
+          );
         } else {
           debugPrint('No data available.');
         }
       },
     );
+  }
+
+  Future<void> writeEmployeeData(
+      Employee2 employee, String enteredNumber) async {
+    await FirebaseDatabase.instance
+        .ref('employees/$enteredNumber')
+        .update(employee.toJson())
+        .then(
+          (value) => debugPrint('Successful'),
+        );
   }
 
   void _appendEnteredNumber(String number, bool clearAll) {
@@ -181,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void validateEmployee2Code(String enteredNumber) {
     bool validated = false;
-    for (var employee in puesdoEmployees) {
+    for (var employee in listOfEmployees) {
       if (employee.employeeCode == enteredNumber) {
         validated = true;
         if (employee.hasCheckedIn) {
@@ -193,6 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
           enterEntryTime(employee);
           employee.hasCheckedIn = true;
         }
+        writeEmployeeData(employee, enteredNumber);
         String message = !employee.hasCheckedIn
             ? 'Have a good day ${employee.fullName}. You worked ${timeInBetween2(employee)}'
             : 'Welcome ${employee.fullName}, entry time has been logged';
@@ -236,13 +253,13 @@ class _MyHomePageState extends State<MyHomePage> {
             .difference(timeEntry.entryTime!)
             .inHours
             .toString();
-        String minutes = timeEntry.exitTime!
-            .difference(timeEntry.entryTime!)
-            .inMinutes
-            .toString();
+        String minutes =
+            ((timeEntry.exitTime!.difference(timeEntry.entryTime!).inMinutes) -
+                    int.parse(hours) * 60)
+                .toString();
         return "$hours hours, $minutes minutes";
       } else {
-        return 'Error missing either the entry or exit time - ${timeEntry.entryTime} ${timeEntry.exitTime}';
+        return 'Error missing either the entry or exit time - ${timeEntry.entryTime}, ${timeEntry.exitTime}';
       }
     } else {
       return 'Error';
@@ -279,10 +296,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildListViewEmployees() {
     //filter active employees only
     var activeFilteredList =
-        puesdoEmployees.where((employee) => employee.hasCheckedIn).toList();
+        listOfEmployees.where((employee) => employee.hasCheckedIn).toList();
 
     var inActiveFilteredList =
-        puesdoEmployees.where((employee) => !employee.hasCheckedIn).toList();
+        listOfEmployees.where((employee) => !employee.hasCheckedIn).toList();
 
     return Column(
       children: [
@@ -312,7 +329,10 @@ class _MyHomePageState extends State<MyHomePage> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: filteredList.length,
       itemBuilder: (context, index) {
-        if (isActiveList) {
+        if (isActiveList &&
+            filteredList[index]
+                    .entryMap[Constants.getKeyWithDateTimeNowFormat()] !=
+                null) {
           entryTime = Constants.formattedDate(filteredList[index]
               .entryMap[Constants.getKeyWithDateTimeNowFormat()]!
               .entryTime!);
