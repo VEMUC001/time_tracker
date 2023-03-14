@@ -1,9 +1,11 @@
 import 'dart:async';
 
-import 'package:employee_time_tracker/constants.dart';
+import 'package:employee_time_tracker/utils/constants.dart';
 import 'package:employee_time_tracker/models/employee_2.dart';
+import 'package:employee_time_tracker/widgets/list_tile.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -17,20 +19,49 @@ class _MyHomePageState extends State<MyHomePage> {
   String _enteredNumber = "";
   bool isLoading = true;
   List<Employee2> listOfEmployees = [];
+  late String _secretCode;
+  final _nameController = TextEditingController();
+  final _codeController = TextEditingController();
+  final _secretEmployerController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     readEmployeeData();
+    readSecretCode();
+    debugPrint(
+        Constants.getWeeksForRange2(DateTime.utc(2023, 01, 01), DateTime.now())
+            .toString());
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _codeController.dispose();
+    _secretEmployerController.dispose();
+    super.dispose();
+  }
+
+  Future<void> readSecretCode() async {
+    await FirebaseDatabase.instance.ref('secretCode').get().then(
+          (snapshot) => {
+            if (snapshot.exists)
+              {
+                _secretCode = snapshot.value.toString(),
+              }
+            else
+              {
+                debugPrint('No code exists, please check console'),
+              }
+          },
+        );
   }
 
   Future<void> readEmployeeData() async {
+    listOfEmployees.clear();
     await FirebaseDatabase.instance.ref('employees').get().then(
       (DataSnapshot snapshot) {
         if (snapshot.exists) {
-          debugPrint(snapshot.value.toString());
-          debugPrint(snapshot.value.runtimeType.toString());
-
           var list = (snapshot.value as Map).values.toList();
           for (var element in list) {
             Employee2 employee =
@@ -55,7 +86,19 @@ class _MyHomePageState extends State<MyHomePage> {
         .ref('employees/$enteredNumber')
         .update(employee.toJson())
         .then(
-          (value) => debugPrint('Successful'),
+          (value) => {debugPrint('Successful')},
+        );
+  }
+
+  Future<void> addNewEmployee(Employee2 employee, String enteredNumber) async {
+    await FirebaseDatabase.instance
+        .ref('employees/$enteredNumber')
+        .set(employee.toJson())
+        .then(
+          (value) => {
+            readEmployeeData(),
+            debugPrint('Successfully added Employee '),
+          },
         );
   }
 
@@ -73,8 +116,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: addEntryBody(),
       backgroundColor: Colors.white,
+      floatingActionButton: Align(
+        alignment: Alignment.topLeft,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 48.0, left: 24.0),
+          child: FloatingActionButton(
+            onPressed: () => buildBottomSheet(),
+            child: const Icon(Icons.person),
+          ),
+        ),
+      ),
     );
   }
 
@@ -321,47 +375,106 @@ class _MyHomePageState extends State<MyHomePage> {
 
   ListView buildListOfEmployees(
       List<Employee2> filteredList, Color backgroundColor, bool isActiveList) {
-    String? entryTime;
-    String exitTimeString = "Enter your code to log your time";
-
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: filteredList.length,
       itemBuilder: (context, index) {
-        if (isActiveList &&
-            filteredList[index]
-                    .entryMap[Constants.getKeyWithDateTimeNowFormat()] !=
-                null) {
-          entryTime = Constants.formattedDate(filteredList[index]
-              .entryMap[Constants.getKeyWithDateTimeNowFormat()]!
-              .entryTime!);
-        } else {}
+        return ListViewTile(
+          employee: filteredList[index],
+          index: index,
+          isActiveList: isActiveList,
+          backgroundColor: backgroundColor,
+        );
+      },
+    );
+  }
 
+  Future buildBottomSheet() {
+    return showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Material(
-            elevation: 10,
-            color: backgroundColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            child: Container(
-              padding: const EdgeInsets.all(4.0),
-              height: 60,
-              width: double.maxFinite,
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Column(
-                  children: [
-                    Text(
-                      filteredList[index].fullName,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                      labelStyle: TextStyle(fontSize: 16),
                     ),
-                    if (entryTime != null && entryTime!.isNotEmpty)
-                      Text("Clocked in at : $entryTime ",
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 14))
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  TextField(
+                    controller: _codeController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Code (4 digits)',
+                      labelStyle: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  TextField(
+                    controller: _secretEmployerController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Employer Code to Validate',
+                      labelStyle: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 32.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      //Validate _secretEmployerController
+                      String name = _nameController.text;
+                      String code = _codeController.text;
+                      String secretCode = _secretEmployerController.text;
+                      _nameController.clear();
+                      _codeController.clear();
+                      _secretEmployerController.clear();
+                      if (name.isNotEmpty &&
+                          code.isNotEmpty &&
+                          secretCode.isNotEmpty) {
+                        if (code.length == 4) {
+                          if (_secretCode == secretCode) {
+                            addNewEmployee(
+                                Employee2(
+                                  fullName: name,
+                                  employeeCode: code,
+                                  hasCheckedIn: false,
+                                  entryMap: {},
+                                ),
+                                code);
+                          } else {
+                            snackBarWithMessage(
+                                "Enter a VALID employeer code to add");
+                          }
+                        } else {
+                          snackBarWithMessage(
+                              "Employee code can only be 4 digits");
+                        }
+                      } else {
+                        snackBarWithMessage(
+                            "One of the fields is empty - all fields are required");
+                      }
+                      Navigator.pop(context);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: Text(
+                        'Add',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

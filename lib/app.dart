@@ -1,4 +1,4 @@
-import 'package:employee_time_tracker/constants.dart';
+import 'package:employee_time_tracker/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/home_screen.dart';
