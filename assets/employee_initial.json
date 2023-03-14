@@ -1,0 +1,50 @@
+{
+    "employees": {
+        "1234": {
+            "fullName": "Chandra",
+            "employeeCode": "1234",
+            "hasCheckedIn": true,
+            "entryMap": {
+                "2023-3-8": {
+                    "entryTime": "2023-03-09T14:00:00.000-05:00",
+                    "exitTime": "2023-03-09T19:00:00.000-05:00"
+                },
+                "2023-3-9": {
+                    "entryTime": "2023-03-09T14:00:00.000-05:00",
+                    "exitTime": null
+                }
+            }
+        },
+        "9999": {
+            "fullName": "Tannu",
+            "employeeCode": "9999",
+            "hasCheckedIn": true,
+            "entryMap": {
+                "2023-3-8": {
+                    "entryTime": "2023-03-09T14:00:00.000-05:00",
+                    "exitTime": "2023-03-09T19:00:00.000-05:00"
+                },
+                "2023-3-9": {
+                    "entryTime": "2023-03-09T14:00:00.000-05:00",
+                    "exitTime": null
+                }
+            }
+        },
+        "0000": {
+            "fullName": "Hamza",
+            "employeeCode": "0000",
+            "hasCheckedIn": false
+        },
+        "5555": {
+            "fullName": "Jagpreet",
+            "employeeCode": "5555",
+            "hasCheckedIn": false,
+            "entryMap": {
+                "2023-3-8": {
+                    "entryTime": "2023-03-09T14:00:00.000-05:00",
+                    "exitTime": "2023-03-09T19:00:00.000-05:00"
+                }
+            }
+        }
+    }
+}
