@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "87797584274",
-    "project_id": "timetracker-31f94",
-    "storage_bucket": "timetracker-31f94.appspot.com"
+    "project_number": "374010154862",
+    "firebase_url": "https://one-life-time-tracker-default-rtdb.firebaseio.com",
+    "project_id": "one-life-time-tracker",
+    "storage_bucket": "one-life-time-tracker.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:87797584274:android:6c03cb4c4489247cb3b14b",
+        "mobilesdk_app_id": "1:374010154862:android:3716ebe79dab6988c7bb7f",
         "android_client_info": {
           "package_name": "com.example.employee_time_tracker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "87797584274-h6m1b8jr05lqrb4e3l0pqiq6vbnmik2v.apps.googleusercontent.com",
+          "client_id": "374010154862-mk0shn3986ev40pgurr83jlt3ucpi2s0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAGAD9_qc_OBhPQ_cDCpCjuCUG-nB6xgNA"
+          "current_key": "AIzaSyBC_GVWiFMuTHJJYAzrx6zGeTm3qL7HUII"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "87797584274-h6m1b8jr05lqrb4e3l0pqiq6vbnmik2v.apps.googleusercontent.com",
+              "client_id": "374010154862-mk0shn3986ev40pgurr83jlt3ucpi2s0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "374010154862-1lrimr8vtn7lbfkhdvgpi4onej6kb6b1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.employeeTimeTracker"
+              }
             }
           ]
         }

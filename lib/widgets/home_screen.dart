@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:employee_time_tracker/main.dart';
 import 'package:employee_time_tracker/utils/constants.dart';
 import 'package:employee_time_tracker/models/employee_2.dart';
 import 'package:employee_time_tracker/widgets/list_tile.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -43,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> readSecretCode() async {
-    await FirebaseDatabase.instance.ref('secretCode').get().then(
+    await getInstanceForFireBase().ref('secretCode').get().then(
           (snapshot) => {
             if (snapshot.exists)
               {
@@ -59,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> readEmployeeData() async {
     listOfEmployees.clear();
-    await FirebaseDatabase.instance.ref('employees').get().then(
+    await getInstanceForFireBase().ref('employees').get().then(
       (DataSnapshot snapshot) {
         if (snapshot.exists) {
           var list = (snapshot.value as Map).values.toList();
@@ -82,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> writeEmployeeData(
       Employee2 employee, String enteredNumber) async {
-    await FirebaseDatabase.instance
+    await getInstanceForFireBase()
         .ref('employees/$enteredNumber')
         .update(employee.toJson())
         .then(
@@ -91,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> addNewEmployee(Employee2 employee, String enteredNumber) async {
-    await FirebaseDatabase.instance
+    await getInstanceForFireBase()
         .ref('employees/$enteredNumber')
         .set(employee.toJson())
         .then(

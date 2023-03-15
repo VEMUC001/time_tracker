@@ -44,41 +44,43 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAqmc1ZvyX40FLWheua707HoWBgmjNWWHU',
-    appId: '1:87797584274:web:06a35ef62d2d657bb3b14b',
-    messagingSenderId: '87797584274',
-    projectId: 'timetracker-31f94',
-    authDomain: 'timetracker-31f94.firebaseapp.com',
-    storageBucket: 'timetracker-31f94.appspot.com',
+    apiKey: 'AIzaSyDAnQxA8_Grn9smG85s_ErW1-96XZ7UCXw',
+    appId: '1:374010154862:web:fee5ce390ac36a32c7bb7f',
+    messagingSenderId: '374010154862',
+    projectId: 'one-life-time-tracker',
+    authDomain: 'one-life-time-tracker.firebaseapp.com',
+    databaseURL: 'https://one-life-time-tracker-default-rtdb.firebaseio.com',
+    storageBucket: 'one-life-time-tracker.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAGAD9_qc_OBhPQ_cDCpCjuCUG-nB6xgNA',
-    appId: '1:87797584274:android:6c03cb4c4489247cb3b14b',
-    messagingSenderId: '87797584274',
-    projectId: 'timetracker-31f94',
-    storageBucket: 'timetracker-31f94.appspot.com',
+    apiKey: 'AIzaSyBC_GVWiFMuTHJJYAzrx6zGeTm3qL7HUII',
+    appId: '1:374010154862:android:3716ebe79dab6988c7bb7f',
+    messagingSenderId: '374010154862',
+    projectId: 'one-life-time-tracker',
+    databaseURL: 'https://one-life-time-tracker-default-rtdb.firebaseio.com',
+    storageBucket: 'one-life-time-tracker.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB2ueZK-Db4RILbwe4fhs7oYuc_4aeKwPY',
-    appId: '1:87797584274:ios:2807a12277e65ea0b3b14b',
-    messagingSenderId: '87797584274',
-    projectId: 'timetracker-31f94',
-    storageBucket: 'timetracker-31f94.appspot.com',
-    iosClientId:
-        '87797584274-uf5dr0p5pearlij6q2i5ogh115ghp05j.apps.googleusercontent.com',
+    apiKey: 'AIzaSyA7fwukH2aDU5km0Y87rLrHjxQe01iH5Do',
+    appId: '1:374010154862:ios:10cd2488069d9227c7bb7f',
+    messagingSenderId: '374010154862',
+    projectId: 'one-life-time-tracker',
+    databaseURL: 'https://one-life-time-tracker-default-rtdb.firebaseio.com',
+    storageBucket: 'one-life-time-tracker.appspot.com',
+    iosClientId: '374010154862-1lrimr8vtn7lbfkhdvgpi4onej6kb6b1.apps.googleusercontent.com',
     iosBundleId: 'com.example.employeeTimeTracker',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyB2ueZK-Db4RILbwe4fhs7oYuc_4aeKwPY',
-    appId: '1:87797584274:ios:2807a12277e65ea0b3b14b',
-    messagingSenderId: '87797584274',
-    projectId: 'timetracker-31f94',
-    storageBucket: 'timetracker-31f94.appspot.com',
-    iosClientId:
-        '87797584274-uf5dr0p5pearlij6q2i5ogh115ghp05j.apps.googleusercontent.com',
+    apiKey: 'AIzaSyA7fwukH2aDU5km0Y87rLrHjxQe01iH5Do',
+    appId: '1:374010154862:ios:10cd2488069d9227c7bb7f',
+    messagingSenderId: '374010154862',
+    projectId: 'one-life-time-tracker',
+    databaseURL: 'https://one-life-time-tracker-default-rtdb.firebaseio.com',
+    storageBucket: 'one-life-time-tracker.appspot.com',
+    iosClientId: '374010154862-1lrimr8vtn7lbfkhdvgpi4onej6kb6b1.apps.googleusercontent.com',
     iosBundleId: 'com.example.employeeTimeTracker',
   );
 }

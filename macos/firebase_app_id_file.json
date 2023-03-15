@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:87797584274:ios:2807a12277e65ea0b3b14b",
-  "FIREBASE_PROJECT_ID": "timetracker-31f94",
-  "GCM_SENDER_ID": "87797584274"
+  "GOOGLE_APP_ID": "1:374010154862:ios:10cd2488069d9227c7bb7f",
+  "FIREBASE_PROJECT_ID": "one-life-time-tracker",
+  "GCM_SENDER_ID": "374010154862"
 }
