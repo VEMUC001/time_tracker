@@ -4,7 +4,6 @@ import 'package:employee_time_tracker/main.dart';
 import 'package:employee_time_tracker/utils/constants.dart';
 import 'package:employee_time_tracker/models/employee_2.dart';
 import 'package:employee_time_tracker/widgets/list_tile.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
