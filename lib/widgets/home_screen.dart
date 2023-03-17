@@ -451,6 +451,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   employeeCode: code,
                                   hasCheckedIn: false,
                                   entryMap: {},
+                                  paidPerWeek: {},
                                 ),
                                 code);
                           } else {

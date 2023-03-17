@@ -3,16 +3,19 @@ class Employee2 {
   String employeeCode;
   bool hasCheckedIn = false;
   Map<String, TimeEntry> entryMap;
+  Map<String, bool> paidPerWeek;
 
   Employee2({
     required this.fullName,
     required this.employeeCode,
     required this.hasCheckedIn,
     required this.entryMap,
+    required this.paidPerWeek,
   });
 
   factory Employee2.fromJson(Map<String, dynamic> json) {
     Map<String, TimeEntry> entryMap = {};
+    Map<String, bool> paidPerWeek = {};
 
     if (json['entryMap'] != null) {
       Map<String, dynamic> entryJsonMap =
@@ -24,11 +27,20 @@ class Employee2 {
         entryMap[key] = entry;
       });
     }
+
+    if (json['paidPerWeek'] != null) {
+      Map<String, dynamic> entryJsonMap =
+          Map<String, dynamic>.from(json['paidPerWeek']);
+      entryJsonMap.forEach((key, booleanJson) {
+        entryMap[key] = booleanJson;
+      });
+    }
     return Employee2(
       fullName: json['fullName'],
       employeeCode: json['employeeCode'],
       hasCheckedIn: json['hasCheckedIn'],
       entryMap: entryMap,
+      paidPerWeek: paidPerWeek,
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Constants {
@@ -17,6 +18,53 @@ class Constants {
   static String formattedDateOnlyWithYearDate(DateTime date) {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     return formatter.format(date);
+  }
+
+  static String formatDateWithOurFormat(DateTime date) {
+    String formattedDate = '${date.year}-${date.month}-${date.day}';
+    return formattedDate;
+  }
+
+  static Map<String, List<String>> getDatesOfWeekStarting2023() {
+    Map<String, List<String>> daysOfTheWeek = {};
+
+    DateTime start = DateTime(2023, 1, 1);
+    DateTime end = DateTime.now();
+
+    // Loop through each week and print the dates
+    for (var date = start;
+        date.isBefore(end);
+        date = date.add(
+      const Duration(days: 7),
+    ),) {
+      List<String> daysOfWeek = [];
+      DateTime sunday = date.subtract(Duration(days: date.weekday));
+
+      for (int i = 0; i < 7; i++) {
+        DateTime day = sunday.add(Duration(days: i));
+        daysOfWeek.add(formatDateWithOurFormat(day));
+      }
+
+      daysOfTheWeek[sunday.toString().substring(0, 10)] = daysOfWeek;
+    }
+    debugPrint(daysOfTheWeek.toString());
+    return daysOfTheWeek;
+  }
+
+  static List<String> getStartOfWeekDates() {
+    List<String> startingDateOfWeek = [];
+    DateTime end = DateTime.now();
+    DateTime start = DateTime(2023, 1, 1);
+    for (var date = start;
+        date.isBefore(end);
+        date = date.add(
+      const Duration(days: 7),
+    ),) {
+      DateTime sunday = date.subtract(Duration(days: date.weekday));
+      startingDateOfWeek.add(sunday.toString().substring(0, 10));
+    }
+
+    return startingDateOfWeek.reversed.toList();
   }
 
   static List<String> getWeeksForRange2(DateTime start, DateTime end) {
