@@ -44,7 +44,6 @@ class ListViewTile extends StatelessWidget {
       entryTime = Constants.formattedDate(employee
           .entryMap[Constants.getKeyWithDateTimeNowFormat()]!.entryTime!);
     } else {}
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
