@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: Constants.appBarTitle),
+      home: const SafeArea(child: MyHomePage(title: Constants.appBarTitle)),
     );
   }
 }
