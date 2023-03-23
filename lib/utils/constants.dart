@@ -25,6 +25,16 @@ class Constants {
     return formattedDate;
   }
 
+  static List<String> getDatesInCurrentWeek() {
+    List<String> dates = [];
+    DateTime now = DateTime.now();
+    DateTime sunday = now.subtract(Duration(days: now.weekday));
+    for (int i = 0; i <= now.weekday; i++) {
+      dates.add(DateFormat('yyyy-M-d').format(sunday.add(Duration(days: i))));
+    }
+    return dates;
+  }
+
   static Map<String, List<String>> getDatesOfWeekStarting2023() {
     Map<String, List<String>> daysOfTheWeek = {};
 
